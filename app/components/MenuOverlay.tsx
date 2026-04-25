@@ -99,25 +99,24 @@ export default function MenuOverlay({ isOpen, onClose }: MenuOverlayProps) {
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-[200] bg-[#00FF00] flex flex-col justify-between"
+      className="fixed inset-0 z-[200] bg-[#0d5b45] flex flex-col justify-between"
       style={{ display: "none" }}
     >
       {/* Top Header / Close Button */}
       <div className="w-full h-[48px] md:h-[80px] px-6 pt-4 md:px-12 flex justify-between items-center shrink-0">
-        <div className="relative inline-block overflow-hidden pb-1">
-          <h1 className="font-bebas border-b-3 border-black text-black text-[32px] md:text-[45px] tracking-widest uppercase m-0 leading-none relative z-10">
-            ZORSHOR
-          </h1>
-          <div className="brand-underline absolute bottom-0 left-0 w-full h-[3px] bg-black origin-left scale-x-0 z-20"></div>
-        </div>
+        <img
+          src="/zorshor-logo.png"
+          alt="ZORSHOR Logo"
+          className="h-16 object-cover"
+        />
         {/* Close Button */}
         <div
           onClick={handleClose}
-          className="w-10 h-10 rounded-full bg-black flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
+          className="w-10 h-10 rounded-full bg-white flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
         >
           <div className={`relative w-4 h-4 transition-all duration-400 ease-in-out ${isClosing ? 'scale-75 rotate-180' : 'rotate-0'}`}>
-            <div className="absolute top-1/2 left-0 w-full h-[2px] bg-[#00FF00] transform -translate-y-1/2 rotate-45"></div>
-            <div className="absolute top-1/2 left-0 w-full h-[2px] bg-[#00FF00] transform -translate-y-1/2 -rotate-45"></div>
+            <div className="absolute top-1/2 left-0 w-full h-[2px] bg-[#0d5b45] transform -translate-y-1/2 rotate-45"></div>
+            <div className="absolute top-1/2 left-0 w-full h-[2px] bg-[#0d5b45] transform -translate-y-1/2 -rotate-45"></div>
           </div>
         </div>
       </div>
@@ -128,29 +127,32 @@ export default function MenuOverlay({ isOpen, onClose }: MenuOverlayProps) {
         {/* Left Side: Navigation Links */}
         <div className="flex flex-col items-center md:items-start space-y-4 md:space-y-2">
           {menuLinks.map((item, index) => {
-            const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+            const isActive = 
+              pathname === item.href || 
+              (item.href !== "/" && pathname.startsWith(item.href)) ||
+              (item.href === "/" && pathname.startsWith("/demo"));
             return (
               <div key={index} className="overflow-hidden" style={{ padding: '0.4em 0' }}>
                 <a
                   href={item.href}
                   onClick={handleClose}
                   className={`menu-link-left relative flex items-center font-dm uppercase leading-none tracking-tight transition-all duration-500 font-bold px-6 py-3 ${
-                    isActive ? "text-[#0d5b45] md:pl-12 md:pr-20" : "text-black hover:opacity-60 md:px-12"
+                    isActive ? "text-[#00FF00] md:pl-12 md:pr-20" : "text-white hover:opacity-60 md:px-12"
                   } text-5xl sm:text-7xl md:text-[5.2vw]`}
                   style={{ transformOrigin: "bottom" }}
                 >
                   {isActive && (
                     <div className="absolute inset-0 z-0 pointer-events-none">
                       {/* Outer Border */}
-                      <div className="absolute inset-0 border border-black/10"></div>
+                      <div className="absolute inset-0 border border-white/20"></div>
                       {/* Inner Border (Offset) */}
-                      <div className="absolute inset-1.5 border border-black/5"></div>
+                      <div className="absolute inset-1.5 border border-white/10"></div>
                       
                       {/* Corner Accents (Technical Style) */}
-                      <div className="absolute -top-[1px] -left-[1px] w-3 h-3 border-t-[1.5px] border-l-[1.5px] border-[#0d5b45]"></div>
-                      <div className="absolute -top-[1px] -right-[1px] w-3 h-3 border-t-[1.5px] border-r-[1.5px] border-[#0d5b45]"></div>
-                      <div className="absolute -bottom-[1px] -left-[1px] w-3 h-3 border-b-[1.5px] border-l-[1.5px] border-[#0d5b45]"></div>
-                      <div className="absolute -bottom-[1px] -right-[1px] w-3 h-3 border-b-[1.5px] border-r-[1.5px] border-[#0d5b45]"></div>
+                      <div className="absolute -top-[1px] -left-[1px] w-3 h-3 border-t-[1.5px] border-l-[1.5px] border-[#00FF00]"></div>
+                      <div className="absolute -top-[1px] -right-[1px] w-3 h-3 border-t-[1.5px] border-r-[1.5px] border-[#00FF00]"></div>
+                      <div className="absolute -bottom-[1px] -left-[1px] w-3 h-3 border-b-[1.5px] border-l-[1.5px] border-[#00FF00]"></div>
+                      <div className="absolute -bottom-[1px] -right-[1px] w-3 h-3 border-b-[1.5px] border-r-[1.5px] border-[#00FF00]"></div>
                     </div>
                   )}
                   <span className="relative flex items-center z-10">
@@ -163,7 +165,7 @@ export default function MenuOverlay({ isOpen, onClose }: MenuOverlayProps) {
                         fontSize: '0.4em', 
                         transform: "scaleY(0.8)", 
                         marginTop: '-0.1em', 
-                        WebkitTextStroke: '0.08em black',
+                        WebkitTextStroke: '0.08em white',
                         color: 'transparent'
                       }}
                     >
@@ -175,40 +177,40 @@ export default function MenuOverlay({ isOpen, onClose }: MenuOverlayProps) {
             );
           })}
 
-          {/* Mobile-only Contact Button (hidden on desktop because it's on the right) */}
+          {/* Mobile-only Contact Button */}
           <div className="md:hidden overflow-hidden pt-8">
-            <button className="menu-link-left bg-black text-[#00FF00] px-10 py-4 font-dm font-bold text-xl tracking-wider hover:bg-[#0d5b45] hover:text-white transition-all duration-300">
+            <button className="menu-link-left bg-white text-[#0d5b45] px-10 py-4 font-dm font-bold text-xl tracking-wider hover:bg-[#00FF00] hover:text-black transition-all duration-300">
               CONTACT US
             </button>
           </div>
         </div>
 
-        {/* Right Side: Desktop Info (Hidden on mobile) */}
+        {/* Right Side: Desktop Info */}
         <div className="hidden md:flex flex-col items-end justify-between h-full py-4 text-right max-w-sm">
           <div className="space-y-12">
             <div className="menu-right-anim">
-              <span className="font-mono text-black/40 text-xs tracking-widest uppercase block mb-4">Get in Touch</span>
-              <button className="bg-black text-[#00FF00] px-12 py-5 font-dm font-bold text-2xl tracking-wider hover:bg-[#0d5b45] hover:text-white transition-all duration-300">
+              <span className="font-mono text-white/40 text-xs tracking-widest uppercase block mb-4">Get in Touch</span>
+              <button className="bg-white text-[#0d5b45] px-12 py-5 font-dm font-bold text-2xl tracking-wider hover:bg-[#00FF00] hover:text-black transition-all duration-300">
                 CONTACT US
               </button>
             </div>
             
             <div className="space-y-6">
               <div className="menu-right-anim">
-                <span className="font-mono text-black/40 text-xs tracking-widest uppercase block mb-2">Social</span>
+                <span className="font-mono text-white/40 text-xs tracking-widest uppercase block mb-2">Social</span>
                 <a
                   href="https://www.instagram.com/thezorshorsocial/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="block font-dm text-black text-2xl hover:opacity-60 transition-opacity font-medium"
+                  className="block font-dm text-white text-2xl hover:opacity-60 transition-opacity font-medium"
                 >
                   INSTAGRAM ↗
                 </a>
               </div>
               
               <div className="menu-right-anim">
-                <span className="font-mono text-black/40 text-xs tracking-widest uppercase block mb-2">Email</span>
-                <a href="mailto:hello@zorshor.social" className="block font-dm text-black text-2xl hover:opacity-60 transition-opacity font-medium">
+                <span className="font-mono text-white/40 text-xs tracking-widest uppercase block mb-2">Email</span>
+                <a href="mailto:hello@zorshor.social" className="block font-dm text-white text-2xl hover:opacity-60 transition-opacity font-medium">
                   HELLO@ZORSHOR.SOCIAL
                 </a>
               </div>
@@ -218,7 +220,7 @@ export default function MenuOverlay({ isOpen, onClose }: MenuOverlayProps) {
       </div>
 
       {/* Bottom Footer */}
-      <div ref={bottomRef} className="w-full flex flex-col md:flex-row items-center md:justify-between px-6 md:px-12 pb-8 md:pb-12 font-dm text-black font-medium tracking-widest text-xs shrink-0 gap-4">
+      <div ref={bottomRef} className="w-full flex flex-col md:flex-row items-center md:justify-between px-6 md:px-12 pb-8 md:pb-12 font-dm text-white font-medium tracking-widest text-xs shrink-0 gap-4">
         <p className="menu-bottom-link opacity-40 uppercase">© 2026 ZORSHOR ALL RIGHTS RESERVED</p>
         <div className="hidden md:flex gap-8 opacity-40 uppercase menu-bottom-link">
           <a href="#" className="hover:opacity-100 transition-opacity">Privacy Policy</a>

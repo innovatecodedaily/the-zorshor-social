@@ -1,7 +1,7 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono, Bebas_Neue, DM_Sans } from "next/font/google";
+import { Geist, Geist_Mono, Bebas_Neue, DM_Sans, Sacramento, Satisfy } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
+import { Metadata } from "next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,6 +21,18 @@ const bebasNeue = Bebas_Neue({
 
 const dmSans = DM_Sans({
   variable: "--font-dm",
+  subsets: ["latin"],
+});
+
+const sacramento = Sacramento({
+  weight: "400",
+  variable: "--font-sacramento",
+  subsets: ["latin"],
+});
+
+const satisfy = Satisfy({
+  weight: "400",
+  variable: "--font-satisfy",
   subsets: ["latin"],
 });
 
@@ -64,7 +76,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${bebasNeue.variable} ${dmSans.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${bebasNeue.variable} ${dmSans.variable} ${sacramento.variable} ${satisfy.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-black">
         {children}

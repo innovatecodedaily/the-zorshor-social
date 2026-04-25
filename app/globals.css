@@ -12,6 +12,9 @@
   --font-mono: var(--font-geist-mono);
   --font-bebas: var(--font-bebas);
   --font-dm: var(--font-dm);
+  --font-sacramento: var(--font-sacramento);
+  --font-ephesis: var(--font-ephesis);
+  --font-satisfy: var(--font-satisfy);
 }
 
 @media (prefers-color-scheme: dark) {

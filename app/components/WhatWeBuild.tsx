@@ -6,7 +6,12 @@ import { ScrollTrigger } from "gsap/dist/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const WhatWeBuild = () => {
+interface WhatWeBuildProps {
+  showOrder?: boolean;
+  showBorder?: boolean;
+}
+
+const WhatWeBuild = ({ showOrder = true, showBorder = true }: WhatWeBuildProps) => {
   const sectionRef = useRef<HTMLElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
@@ -79,8 +84,12 @@ const WhatWeBuild = () => {
       className="relative w-full py-24 md:py-40 bg-[#080808] px-6 md:px-12 overflow-hidden"
     >
       {/* Hero-style Grid Lines (Vertical Only) */}
-      <div className="absolute top-0 left-6 md:left-12 w-[1px] h-full bg-white/10 z-0 pointer-events-none"></div>
-      <div className="absolute top-0 right-6 md:right-12 w-[1px] h-full bg-white/10 z-0 pointer-events-none"></div>
+      {showBorder && (
+        <>
+          <div className="absolute top-0 left-6 md:left-12 w-[1px] h-full bg-white/10 z-0 pointer-events-none"></div>
+          <div className="absolute top-0 right-6 md:right-12 w-[1px] h-full bg-white/10 z-0 pointer-events-none"></div>
+        </>
+      )}
 
       <div className="max-w-[1440px] mx-auto relative z-10">
         <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 md:mb-16 gap-2 md:gap-4">
@@ -104,7 +113,9 @@ const WhatWeBuild = () => {
 
         <div
           ref={gridRef}
-          className="grid grid-cols-1 md:grid-cols-2 gap-[1px] bg-white/10 border border-white/10"
+          className={`grid grid-cols-1 md:grid-cols-2 ${
+            showBorder ? "gap-[1px] bg-white/10 border border-white/10" : "gap-8"
+          }`}
         >
           {projects.map((project, index) => (
             <div
@@ -121,7 +132,9 @@ const WhatWeBuild = () => {
               </div>
 
               <div className="relative z-10 flex justify-between items-start">
-                <span className="font-mono text-white text-[10px] md:text-xs tracking-widest opacity-70">{project.number}</span>
+                {showOrder && (
+                  <span className="font-mono text-white text-[10px] md:text-xs tracking-widest opacity-70">{project.number}</span>
+                )}
                 <span className="font-mono text-[#EAB308] text-[10px] tracking-widest uppercase opacity-0 group-hover:opacity-100 transition-opacity duration-500">
                   EXPLORE CASE
                 </span>
