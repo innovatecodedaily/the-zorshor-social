@@ -2,6 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
+import { usePathname } from "next/navigation";
 
 interface MenuOverlayProps {
   isOpen: boolean;
@@ -9,9 +10,17 @@ interface MenuOverlayProps {
 }
 
 export default function MenuOverlay({ isOpen, onClose }: MenuOverlayProps) {
+  const pathname = usePathname();
   const overlayRef = useRef<HTMLDivElement>(null);
   const menuItemsRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+
+  const menuLinks = [
+    { name: "HOME", href: "/" },
+    { name: "PROCESS", href: "#process" },
+    { name: "CULTURE", href: "#" },
+    { name: "TEAM", href: "#" },
+  ];
 
   const tlRef = useRef<gsap.core.Timeline | null>(null);
   const [isClosing, setIsClosing] = useState(false);
@@ -28,10 +37,12 @@ export default function MenuOverlay({ isOpen, onClose }: MenuOverlayProps) {
   useEffect(() => {
     if (!overlayRef.current || !menuItemsRef.current || !bottomRef.current) return;
 
-    if (!tlRef.current) {
+    if (isOpen) {
+      // Recreate timeline on open to ensure fresh DOM nodes are captured
+      if (tlRef.current) tlRef.current.kill();
       tlRef.current = gsap.timeline({ paused: true });
 
-      // Animate overlay background (curtain reveal from top)
+      // Animate overlay background
       tlRef.current.fromTo(
         overlayRef.current,
         { clipPath: "inset(0% 0% 100% 0%)" },
@@ -39,42 +50,50 @@ export default function MenuOverlay({ isOpen, onClose }: MenuOverlayProps) {
       );
 
       // Animate brand underline
+      tlRef.current.fromTo(".brand-underline", { scaleX: 0 }, { scaleX: 1, duration: 0.6, ease: "power3.out" }, "-=0.4");
+
+      // Animate left links
+      const leftLinks = gsap.utils.toArray(".menu-link-left", menuItemsRef.current);
       tlRef.current.fromTo(
-        ".brand-underline",
-        { scaleX: 0 },
-        { scaleX: 1, duration: 0.6, ease: "power3.out" },
-        "-=0.4"
+        leftLinks,
+        { y: "130%", opacity: 0 },
+        { y: "0%", opacity: 1, duration: 0.8, stagger: 0.1, ease: "power4.out" },
+        "-=0.5"
       );
 
-      // Animate menu links
-      const links = gsap.utils.toArray(".menu-link", menuItemsRef.current);
+      // Animate right side
+      const rightAnims = gsap.utils.toArray(".menu-right-anim", menuItemsRef.current);
       tlRef.current.fromTo(
-        links,
-        { y: "130%" },
-        { y: "0%", duration: 0.6, stagger: 0.08, ease: "power3.out" },
-        "-=0.4"
+        rightAnims,
+        { x: 30, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.8, stagger: 0.08, ease: "power3.out" },
+        "-=0.6"
       );
 
-      // Animate bottom footer items
+      // Animate footer
       const bottomLinks = gsap.utils.toArray(".menu-bottom-link", bottomRef.current);
       tlRef.current.fromTo(
         bottomLinks,
         { opacity: 0, y: 15 },
-        { opacity: 1, y: 0, duration: 0.4, stagger: 0.05, ease: "power2.out" },
-        "-=0.3"
+        { opacity: 1, y: 0, duration: 0.6, stagger: 0.05, ease: "power2.out" },
+        "-=0.5"
       );
-    }
 
-    if (isOpen) {
       gsap.set(overlayRef.current, { display: "flex" });
       tlRef.current.play();
-    } else {
+    } else if (tlRef.current) {
+      // If closing, reverse the existing timeline
       tlRef.current.reverse().then(() => {
         if (!isOpen && overlayRef.current) {
           gsap.set(overlayRef.current, { display: "none" });
         }
       });
     }
+
+    return () => {
+      // Cleanup on unmount, but don't kill the timeline on every isOpen toggle 
+      // unless we're opening a new one.
+    };
   }, [isOpen]);
 
   return (
@@ -103,37 +122,116 @@ export default function MenuOverlay({ isOpen, onClose }: MenuOverlayProps) {
         </div>
       </div>
 
-      {/* Main Menu Items */}
-      <div ref={menuItemsRef} className="flex flex-col items-center justify-center flex-grow -mt-10 space-y-4 sm:space-y-6 md:space-y-8">
-        {["WORK", "CULTURE", "TEAM", "JOBS"].map((item, index) => (
-          <div key={index} className="overflow-hidden" style={{ padding: '0.4em 0.2em 0.2em 0.2em' }}>
-            <a
-              href="#"
-              className="menu-link flex items-center justify-center font-dm text-black text-5xl sm:text-7xl md:text-[8rem] lg:text-[9rem] uppercase leading-none tracking-wide hover:opacity-60 transition-opacity font-semibold"
-              style={{ transform: "scaleY(1.3)", transformOrigin: "bottom" }}
-            >
-              {item}
-              <span
-                className="font-black leading-none ml-2 sm:ml-4 md:ml-6"
-                style={{ fontSize: '0.6em', transform: "scaleY(0.77)", marginTop: '-0.3em', WebkitTextStroke: '0.06em black' }}
-              >
-                ↗
-              </span>
-            </a>
-          </div>
-        ))}
+      {/* Main Menu Content */}
+      <div ref={menuItemsRef} className="flex-grow flex flex-col md:flex-row items-center md:items-start justify-center md:justify-between px-6 md:px-24 py-10 md:py-20 gap-10">
+        
+        {/* Left Side: Navigation Links */}
+        <div className="flex flex-col items-center md:items-start space-y-4 md:space-y-2">
+          {menuLinks.map((item, index) => {
+            const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
+            return (
+              <div key={index} className="overflow-hidden" style={{ padding: '0.4em 0' }}>
+                <a
+                  href={item.href}
+                  onClick={handleClose}
+                  className={`menu-link-left relative flex items-center font-dm uppercase leading-none tracking-tight transition-all duration-500 font-bold px-6 py-3 ${
+                    isActive ? "text-[#0d5b45] md:pl-12 md:pr-20" : "text-black hover:opacity-60 md:px-12"
+                  } text-5xl sm:text-7xl md:text-[5.2vw]`}
+                  style={{ transformOrigin: "bottom" }}
+                >
+                  {isActive && (
+                    <div className="absolute inset-0 z-0 pointer-events-none">
+                      {/* Outer Border */}
+                      <div className="absolute inset-0 border border-black/10"></div>
+                      {/* Inner Border (Offset) */}
+                      <div className="absolute inset-1.5 border border-black/5"></div>
+                      
+                      {/* Corner Accents (Technical Style) */}
+                      <div className="absolute -top-[1px] -left-[1px] w-3 h-3 border-t-[1.5px] border-l-[1.5px] border-[#0d5b45]"></div>
+                      <div className="absolute -top-[1px] -right-[1px] w-3 h-3 border-t-[1.5px] border-r-[1.5px] border-[#0d5b45]"></div>
+                      <div className="absolute -bottom-[1px] -left-[1px] w-3 h-3 border-b-[1.5px] border-l-[1.5px] border-[#0d5b45]"></div>
+                      <div className="absolute -bottom-[1px] -right-[1px] w-3 h-3 border-b-[1.5px] border-r-[1.5px] border-[#0d5b45]"></div>
+                    </div>
+                  )}
+                  <span className="relative flex items-center z-10">
+                    {item.name}
+                  </span>
+                  {!isActive && (
+                    <span
+                      className="font-black leading-none ml-2 md:ml-4 relative z-10"
+                      style={{ 
+                        fontSize: '0.4em', 
+                        transform: "scaleY(0.8)", 
+                        marginTop: '-0.1em', 
+                        WebkitTextStroke: '0.08em black',
+                        color: 'transparent'
+                      }}
+                    >
+                      ↗
+                    </span>
+                  )}
+                </a>
+              </div>
+            );
+          })}
 
-        {/* Contact Us Button in Menu */}
-        <div className="overflow-hidden pt-8 md:pt-12">
-          <button className="menu-link bg-black text-[#00FF00] px-10 py-4 md:px-16 md:py-6 font-dm font-bold text-xl md:text-3xl tracking-wider hover:bg-white hover:text-black transition-all duration-300">
-            CONTACT US
-          </button>
+          {/* Mobile-only Contact Button (hidden on desktop because it's on the right) */}
+          <div className="md:hidden overflow-hidden pt-8">
+            <button className="menu-link-left bg-black text-[#00FF00] px-10 py-4 font-dm font-bold text-xl tracking-wider hover:bg-[#0d5b45] hover:text-white transition-all duration-300">
+              CONTACT US
+            </button>
+          </div>
+        </div>
+
+        {/* Right Side: Desktop Info (Hidden on mobile) */}
+        <div className="hidden md:flex flex-col items-end justify-between h-full py-4 text-right max-w-sm">
+          <div className="space-y-12">
+            <div className="menu-right-anim">
+              <span className="font-mono text-black/40 text-xs tracking-widest uppercase block mb-4">Get in Touch</span>
+              <button className="bg-black text-[#00FF00] px-12 py-5 font-dm font-bold text-2xl tracking-wider hover:bg-[#0d5b45] hover:text-white transition-all duration-300">
+                CONTACT US
+              </button>
+            </div>
+            
+            <div className="space-y-6">
+              <div className="menu-right-anim">
+                <span className="font-mono text-black/40 text-xs tracking-widest uppercase block mb-2">Social</span>
+                <a
+                  href="https://www.instagram.com/thezorshorsocial/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block font-dm text-black text-2xl hover:opacity-60 transition-opacity font-medium"
+                >
+                  INSTAGRAM ↗
+                </a>
+              </div>
+              
+              <div className="menu-right-anim">
+                <span className="font-mono text-black/40 text-xs tracking-widest uppercase block mb-2">Email</span>
+                <a href="mailto:hello@zorshor.social" className="block font-dm text-black text-2xl hover:opacity-60 transition-opacity font-medium">
+                  HELLO@ZORSHOR.SOCIAL
+                </a>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Bottom Footer (Cleaned Up) */}
-      <div ref={bottomRef} className="w-full flex flex-col items-center pb-12 md:pb-16 font-dm text-black font-medium tracking-widest text-xs md:text-sm shrink-0">
+      {/* Bottom Footer */}
+      <div ref={bottomRef} className="w-full flex flex-col md:flex-row items-center md:justify-between px-6 md:px-12 pb-8 md:pb-12 font-dm text-black font-medium tracking-widest text-xs shrink-0 gap-4">
         <p className="menu-bottom-link opacity-40 uppercase">© 2026 ZORSHOR ALL RIGHTS RESERVED</p>
+        <div className="hidden md:flex gap-8 opacity-40 uppercase menu-bottom-link">
+          <a href="#" className="hover:opacity-100 transition-opacity">Privacy Policy</a>
+          <a href="#" className="hover:opacity-100 transition-opacity">Terms of Use</a>
+        </div>
+        <a
+          href="https://www.instagram.com/thezorshorsocial/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="md:hidden menu-bottom-link hover:opacity-60 transition-opacity uppercase"
+        >
+          Instagram ↗
+        </a>
       </div>
     </div>
   );

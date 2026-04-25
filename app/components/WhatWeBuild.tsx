@@ -74,7 +74,7 @@ const WhatWeBuild = () => {
 
   return (
     <section
-      id="what-we-build"
+      id="process"
       ref={sectionRef}
       className="relative w-full py-24 md:py-40 bg-[#080808] px-6 md:px-12 overflow-hidden"
     >

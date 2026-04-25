@@ -33,28 +33,31 @@ const Navbar = React.forwardRef<HTMLDivElement, NavbarProps>(({ shouldAnimate },
     <>
       <nav
         ref={ref}
-        className={`fixed top-0 left-0 w-full z-[100] px-6 md:px-12 py-2 flex justify-between items-center transition-all duration-500 ${
-          isMenuOpen ? "opacity-0 pointer-events-none" : shouldAnimate ? "opacity-100" : "opacity-0"
-        } ${
-          scrolled && !isMenuOpen
+        className={`fixed top-0 left-0 w-full z-[100] px-6 md:px-12 flex justify-between items-center transition-all duration-500 ${isMenuOpen ? "opacity-0 pointer-events-none" : shouldAnimate ? "opacity-100" : "opacity-0"
+          } ${scrolled && !isMenuOpen
             ? "bg-[#080808]/80 backdrop-blur-md border-b border-white/10"
             : "bg-transparent border-b border-transparent"
-        }`}
+          }`}
       >
-        <h1 className="font-bebas text-[#F2E8D9] text-[32px] md:text-[50px] tracking-widest uppercase m-0 leading-none drop-shadow-2xl">
+        {/* <h1 className="font-bebas text-[#0d5b45] text-[32px] md:text-[50px] tracking-widest uppercase m-0 leading-none drop-shadow-2xl">
           ZORSHOR
-        </h1>
+        </h1> */}
+        <img
+          src="/zorshor-logo-transparent.png"
+          alt="ZORSHOR Logo"
+          className="h-16 object-cover"
+        />
 
         {/* Diamond Menu Button */}
         <div
           onClick={handleMenuClick}
           className="h-12 flex items-center justify-end cursor-pointer bg-transparent group"
         >
-          <div className={`grid grid-cols-2 gap-2 transition-all duration-400 ease-in-out ${isIconAnimating ? 'scale-50 rotate-180 opacity-0' : 'group-hover:rotate-90'}`}>
-            <div className="w-1.5 h-1.5 bg-white transform rotate-45"></div>
-            <div className="w-1.5 h-1.5 bg-white transform rotate-45"></div>
-            <div className="w-1.5 h-1.5 bg-white transform rotate-45"></div>
-            <div className="w-1.5 h-1.5 bg-white transform rotate-45"></div>
+          <div className={`grid grid-cols-2 gap-1 transition-all duration-400 ease-in-out ${isIconAnimating ? 'scale-50 rotate-180 opacity-0' : 'group-hover:rotate-90'}`}>
+            <div className="w-[0.3rem] h-[0.3rem] bg-white transform rotate-45"></div>
+            <div className="w-[0.3rem] h-[0.3rem] bg-white transform rotate-45"></div>
+            <div className="w-[0.3rem] h-[0.3rem] bg-white transform rotate-45"></div>
+            <div className="w-[0.3rem] h-[0.3rem] bg-white transform rotate-45"></div>
           </div>
         </div>
       </nav>

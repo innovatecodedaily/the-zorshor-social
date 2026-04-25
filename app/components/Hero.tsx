@@ -26,7 +26,8 @@ const DesktopBottomContent = ({ onScroll }: { onScroll: () => void }) => (
     <div className="absolute bottom-12 right-12 z-20 w-auto max-w-4xl flex flex-col items-end text-right">
       <div className="font-dm text-[#F2E8D9] text-[24px] space-y-8 flex flex-col items-end text-right">
         <p className="hero-bottom-anim opacity-0 leading-snug">
-          <strong className="font-bold text-white uppercase">OWLED</strong> blends <strong className="font-bold text-white">AI-powered strategy,</strong> human storytelling, and unmatched scale to
+          <img src="/zorshor-logo.png" alt="ZORSHOR Logo" className="h-[28px] md:h-[40px] w-auto inline-block align-middle mr-2 mb-1" />
+          blends <strong className="font-bold text-white">strategy, storytelling,</strong> and unmatched scale to
           create work that breaks through the noise across marketing campaigns,<br /> films, social media marketing, influencer marketing and digital IPs.
         </p>
         <p className="hero-bottom-anim opacity-0 leading-snug">
@@ -46,9 +47,10 @@ const MobileBottomContent = ({ onScroll }: { onScroll: () => void }) => (
       EXPLORE OUR ECOSYSTEM
     </button>
 
-    <div className="font-dm text-[#F2E8D9] text-[15.5px] space-y-4 flex flex-col items-end text-right">
+    <div className="font-dm text-[#F2E8D9] text-[16px] space-y-4 flex flex-col items-end text-right">
       <p className="hero-bottom-anim opacity-0 leading-snug">
-        <strong className="font-bold text-white">ZORSHOR</strong> blends <strong className="font-bold text-white">strategy, storytelling,</strong> and <strong className="font-bold text-white">scale</strong> to create work that <br /> breaks through the noise-across films, social, and digital IPs.
+        <img src="/zorshor-logo.png" alt="ZORSHOR Logo" className="h-[20px] w-auto inline-block align-middle mr-1 mb-0.5" />
+        blends <strong className="font-bold text-white">strategy, storytelling,</strong> and <strong className="font-bold text-white">scale</strong> to create work that <br /> breaks through the noise-across films, social, and digital IPs.
       </p>
       <p className="hero-bottom-anim opacity-0 leading-snug">
         If you want work that moves culture, <br /> not just metrics, you've come <br /> to the right place.
@@ -66,7 +68,7 @@ export default function Hero({ shouldAnimate }: HeroProps) {
   const [startTyping, setStartTyping] = useState(false);
 
   const scrollToNext = () => {
-    const nextSection = document.getElementById("what-we-build");
+    const nextSection = document.getElementById("process");
     if (nextSection) {
       nextSection.scrollIntoView({ behavior: "smooth" });
     }

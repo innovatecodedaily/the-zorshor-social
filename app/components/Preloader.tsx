@@ -121,13 +121,13 @@ export default function Preloader({ onComplete }: PreloaderProps) {
 
         <div className="flex flex-col items-center justify-center z-10 relative h-full w-full">
           {/* Logo */}
-          <div ref={logoRef} className="mb-10 opacity-0">
-            <img src="/vercel.svg" alt="Vercel Logo" className="w-28 md:w-40 brightness-0 invert" />
+          <div ref={logoRef} className="mb-4 opacity-0">
+            <img src="/zorshor-logo.png" alt="ZORSHOR Logo" className="w-80 md:w-[480px] object-contain" />
           </div>
 
           {/* Text Box with Borders and Yellow Squares */}
           <div className="relative py-4 px-6 md:py-6 md:px-10 flex flex-col items-center justify-center space-y-[-0.2em]">
-            
+
             {/* Double Horizontal Lines (constrained to vertical edges) */}
             <div className="absolute top-0 left-0 right-0 h-[1px] bg-white/20 z-0"></div>
             <div className="absolute top-[10px] left-0 right-0 h-[1px] bg-white/10 z-0"></div>
@@ -138,7 +138,7 @@ export default function Preloader({ onComplete }: PreloaderProps) {
             {/* Left Pair */}
             <div className="absolute top-[-100vh] bottom-[-100vh] left-0 w-[1px] bg-[linear-gradient(to_bottom,transparent_30%,rgba(255,255,255,0.2)_50%,transparent_70%)] pointer-events-none z-0"></div>
             <div className="absolute top-[-100vh] bottom-[-100vh] left-[10px] w-[1px] bg-[linear-gradient(to_bottom,transparent_30%,rgba(255,255,255,0.1)_50%,transparent_70%)] pointer-events-none z-0"></div>
-            
+
             {/* Right Pair */}
             <div className="absolute top-[-100vh] bottom-[-100vh] right-0 w-[1px] bg-[linear-gradient(to_bottom,transparent_30%,rgba(255,255,255,0.2)_50%,transparent_70%)] pointer-events-none z-0"></div>
             <div className="absolute top-[-100vh] bottom-[-100vh] right-[10px] w-[1px] bg-[linear-gradient(to_bottom,transparent_30%,rgba(255,255,255,0.1)_50%,transparent_70%)] pointer-events-none z-0"></div>
